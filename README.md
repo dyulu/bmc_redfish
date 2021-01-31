@@ -72,3 +72,46 @@ ipmitool -S cached_sdr_file sel elist: speed up sel elist command by using Senso
 user summary:
 user list:
 
+====
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self' --user username:passwd
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/VirtualMedia' --user username:passwd
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/VirtualMedia/Oem/Ami/CD1' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/Actions/Oem/Ami/VirtualMedia.EnableRMedia' --data '{ "RMediaState" : "Disable" }' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/Actions/Oem/Ami/VirtualMedia.EnableRMedia' --data '{ "RMediaState" : "Enable" }' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/Actions/Oem/Ami/VirtualMedia.ConfigureCDInstance' --data '{ "CDInstance" : 1 }' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/VirtualMedia/CD1/Actions/Oem/Ami/VirtualMedia.InsertMedia' --data '{"Image" : "nfs://nfs_server_ip/mnt/nfs_share/CentOS-8.2.2004-x86_64-minimal.iso", "TransferProtocolType" : "NFS"}' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/Self/VirtualMedia/CD1/Actions/Oem/Ami/VirtualMedia.EjectMedia' --data '{ }' --user username:passwd
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Systems/Self/Actions/ComputerSystem.Reset' --data '{"ResetType": "ForceRestart"}' --user username:passwd    # On, ForceOff, GracefulShutdown, ForceRestart
+
+====
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1' --user username:password
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CD1' --user username:password
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/NetworkProtocol' --user username:password
+
+curl -X PATCH -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/NetworkProtocol' --data '{"VirtualMedia": {"ProtocolEnabled": false}}' --user username:password
+
+curl -X PATCH -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/NetworkProtocol' --data '{"VirtualMedia": {"ProtocolEnabled": true}}' --user username:password
+
+curl -X PATCH -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CfgCD' --data '{"Host" : "samba_server_ip", "Path" : "/cifs_share/CentOS-8.2.2004-x86_64-minimal.iso"}' --user username:password       # For Samba server allowing guest access
+
+curl -X PATCH -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CfgCD' --data '{"Host" : "samba_server_ip", "Path" : "/cifs_share/CentOS-8.2.2004-x86_64-minimal.iso", "Username" : "USERNAME", "Password" : "PASSWORD"}' --user username:password
+
+curl -X GET -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CfgCD' --user username:password
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CfgCD/Actions/IsoConfig.Mount' --data '{ }' --user username:password
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Managers/1/VM1/CfgCD/Actions/IsoConfig.UnMount' --data '{ }' --user username:password
+
+curl -X POST -k -H 'Content-Type:  application/json' -i 'https://bmc_ip/redfish/v1/Systems/Self/Actions/ComputerSystem.Reset' --data '{"ResetType": "GracefulRestart"}' --user username:password    # On, GracefulShutdown, GracefulRestart
